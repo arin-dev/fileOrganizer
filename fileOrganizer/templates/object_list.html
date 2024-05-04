@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{room}}</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f5f5f5;
+                margin: 0;
+                padding: 0;
+            }
+    
+            #header {
+                background-color: #333;
+                color: #fff;
+                padding: 10px;
+                text-align: center;
+            }
+    
+            #component-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 20px;
+            }
+    
+            #component {
+                display: none;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            }
+    
+            #toggleButton {
+                background-color: #4CAF50;
+                color: #fff;
+                border: none;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 20px 0;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+    
+            #objects-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: left;
+                padding: 20px;
+            }
+    
+            .object-box {
+                width: 30%;
+                background-color: #fff;
+                border: 2px solid #000;
+                border-radius: 5px;
+                padding: 10px;
+                margin: 10px;
+                box-sizing: border-box;
+                position: relative;
+                text-align: center;
+            }
+    
+            .object-box a {
+                text-decoration: none;
+                color: #000;
+            }
+
+            /* .object-box .icon {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                width: 50px;
+                height: 50px;
+            } */
+        </style>
+</head>
+
+<body>
+    <div id="header">
+        <h1>{{room}}</h1>
+    </div>
+
+    <h2 style="text-align: center;">Objects</h2>
+
+    {% if objects %}
+    <div id="objects-container">
+        {% for object in objects %}
+            {% if object.pdf_file %}
+            <div class="object-box">
+                <a href="{{ object.pdf_file.url }}">
+                    <h3>{{ object.object_name }}</h3>
+                </a>
+                <!-- <p>
+                    {{ object.pdf_file }}
+                </p> -->
+            </div>
+            {% else %}
+            <div class="object-box">
+                    <h3>{{ object.object_name }}</h3>
+                <p>
+                    File not uploaded look into it
+                </p>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div id="component-container">
+        <div id="component">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Create Object</button>
+            </form>
+        </div>
+    </div>
+
+    <button id="toggleButton">+</button>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const component = document.getElementById("component");
+            const toggleButton = document.getElementById("toggleButton");
+    
+            toggleButton.addEventListener("click", function() {
+                component.style.display = (component.style.display === 'none') ? 'block' : 'none';
+            });
+    
+                const form = document.getElementById("createForm");
+                form.addEventListener("submit", function(event) {
+                    console.log("Form submitted!");
+                });
+            });
+    </script>
+</body>
+</html>
